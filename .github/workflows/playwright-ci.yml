@@ -19,19 +19,21 @@ jobs:
       with:
         python-version: '3.11'
 
-    - name: Install dependencies
+    - name: Install dependencies and Playwright browsers
       run: |
+        # Upgrade pip and install Python packages
         python -m pip install --upgrade pip
-        pip install pytest pytest-html
-        pip install playwright
-        playwright install
-
+        pip install pytest pytest-html playwright
+        
+        # Install Playwright's required browser dependencies
+        python -m playwright install
+        
     - name: Run Playwright tests
       run: |
         pytest tests/ --html=report.html --self-contained-html --maxfail=1 --disable-warnings -v
 
     - name: Upload test report
-      uses: actions/upload-artifact@v4   # ✅ Updated to v4
+      uses: actions/upload-artifact@v4
       with:
         name: playwright-html-report
         path: report.html
